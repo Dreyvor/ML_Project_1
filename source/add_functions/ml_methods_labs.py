@@ -14,7 +14,6 @@ def standardize(x):
     std_data = centered_data / np.std(centered_data, axis=0)
     return std_data
 
-
 def standardize_with_meanstd(x, mean, std):
     centered_data = x - mean
     std_data = centered_data / std
