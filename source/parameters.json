@@ -1,0 +1,29 @@
+{"LR":{
+    "lambda_":0.02, 
+    "lr":0.01,
+    "max_iters":100,
+    "perc":0.8,
+    "K":5
+    }, 
+ "LS_GD": {
+    "lr":0.01,
+    "max_iters":100,
+    "perc":0.8,
+    "K":5
+    },
+ "LS_SGD": {
+    "lr":0.01,
+    "max_iters":100,
+    "perc":0.8,
+    "K":5, 
+     "batch_size":1
+    },
+  "LS_normal": {"max_iters":1,
+    "perc":0.8,
+    "K":5},
+  "RR_normal": {
+    "max_iters":1,
+    "perc":0.8,
+    "K":5,
+    "lambda_":0.02} 
+}
