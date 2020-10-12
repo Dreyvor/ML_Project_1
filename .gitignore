@@ -4,7 +4,8 @@ __pycache__/
 *$py.class
 
 #data
-data/*
+#data/*
+#DO NOT PUSH THE DATA ON GITHUB
 
 # C extensions
 *.so
