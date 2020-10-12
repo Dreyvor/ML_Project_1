@@ -20,10 +20,10 @@
     },
   "LS_normal": {"max_iters":1,
     "K":5, 
-     "poly":1},
+     "poly":2},
   "RR_normal": {
     "max_iters":1,
     "K":5,
     "lambda_":0.02, 
-    "poly":1} 
+    "poly":2} 
 }
