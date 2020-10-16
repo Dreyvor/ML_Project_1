@@ -7,7 +7,7 @@
     }, 
  "LS_GD": {
     "lr":0.01,
-    "max_iters":100,
+    "max_iters":250,
     "K":5, 
     "poly":2
     },
