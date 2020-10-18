@@ -9,7 +9,7 @@
     "lr":0.01,
     "max_iters":100,
     "K":5, 
-    "poly":2
+    "poly":2 
     },
  "LS_SGD": {
     "lr":0.01,

@@ -1,15 +1,15 @@
 {"LR":{
-    "lambda_":0.00, 
-    "lr":0.018,
+    "lambda_":0.02, 
+    "lr":0.18,
     "max_iters":250,
     "K":5, 
     "poly":2
     }, 
  "LS_GD": {
     "lr":0.01,
-    "max_iters":250,
+    "max_iters":100,
     "K":5, 
-    "poly":2
+    "poly":2 
     },
  "LS_SGD": {
     "lr":0.01,
@@ -19,7 +19,8 @@
     "batch_size":1
     },
   "LS_normal": {"max_iters":1,
-    "K":5},
+    "K":5, 
+     "poly":2},
   "RR_normal": {
     "max_iters":1,
     "K":5,
