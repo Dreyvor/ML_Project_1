@@ -23,12 +23,14 @@ models = {
 
 if not os.path.exists('../data/results/predictions'):
     os.makedirs('../data/results/predictions')
-
+if not os.path.exists('../data/results/weights'):
+    os.makedirs('../data/results/weigths')
 if not os.path.exists('parameters'):
     os.makedirs('parameters')
+if not os.path.exists('helper_functions'):
+    os.makedirs('helper_functions')
     
-if not os.path.exists('../data/results/weigths'):
-    os.makedirs('../data/results/weigths')
+
     
 # User interaction:
 print('<----------------------START OF PROGRAM: :) ------------------------>')
