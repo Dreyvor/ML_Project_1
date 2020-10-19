@@ -1,8 +1,7 @@
-# Useful starting lines
+# Imports
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
-# importing the module
 import json
 import os
 #additional functions:

@@ -262,7 +262,7 @@ def train_model(tX,
         ax[1].plot(train_costs_.T)
         ax[1].set_title(models[model] + ' , training loss')
         ax[1].legend(range(1, K + 1))
-        plt.savefig('../data/results/plots/'+model+'.png')
+        plt.savefig('../data/results/plots/'+model+'.')
     return best_w, np.mean(loss)
 
 #---------------------------------WEIGHTS WITH GD/SGD:------------------------------#
