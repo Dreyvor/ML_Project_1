@@ -23,5 +23,5 @@ Project 1 of the Machine Learning course given at the EPFL Fall 2020.
 
 ### Instructions to run: 
 - Decide wether to use default parameters for training or your own. Have a look if the default parameters in `parameters/default_parameters.json` are good for you. Otherwise, to take your own, modify the values in `parameters/parameters.json` to suit you. 
-- Go into *source/* and run `$python main.py` andd follow instructions
+- Go into `source/` and run `$python main.py` andd follow instructions
 - Predictions will be saved in `../data/results/predictions/.` and weights will be saved in `../data/results/weights/.`. To see plots of evolution of losses during training, see plots saved in `../data/results/plots/.`
