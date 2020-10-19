@@ -6,6 +6,8 @@ import datetime
 import json
 import os
 from helper_functions.ml_methods_labs import *
+from helper_functions.losses import *
+
 
 def accuracy(feautres, w, true_y):
     """
@@ -17,7 +19,7 @@ def accuracy(feautres, w, true_y):
     @output: (TP+TN)/Total
     """
     y_pred = predict_labels(w, feautres)
-    # encode to 0/1
+    #encode to 0/1
     y_pred_enc = (y_pred + 1) / 2
     P_N = len(y_pred_enc[np.where(np.subtract(y_pred_enc, true_y) == 0)])
     return (P_N / len(true_y)) * 100
@@ -33,37 +35,9 @@ def build_k_indices(y, k_fold, seed=2):
     interval = int(y.shape[0] / k_fold)
     np.random.seed(seed)
     indices = np.random.permutation(y.shape[0])
-    k_indices = [indices[k * interval: (k + 1) * interval]
-                 for k in range(k_fold)]
+    k_indices = [indices[k * interval: (k + 1) * interval]for k in range(k_fold)]
     return np.array(k_indices)
 
-def cost_logistic(tX, y, w, parameters):
-    """
-    cost_logistic: calculates the logistic (regularized) loss
-    @input:
-    - np.array(N,) y: labels
-    - np.array(N,m) tX: features
-    - np.array(m,) w: weights
-    - dict parameters: dictionnary of required parameters
-    @output: 
-    - double cost: logistic loss
-    """
-    # get parameters:
-    lambda_ = parameters['lambda_']
-
-    predictions = sigmoid_activation(tX @ w)
-    m = y.shape[0]
-
-    #Take the sum of both costs: error when label=1 + error when label=0
-    cost = -y * np.log(predictions) - (1 - y) * np.log(1 - predictions)
-
-    #Take the average cost:
-    cost = cost.sum() / m
-
-    # regularizer:
-    if lambda_:
-        cost += (lambda_ / (2 * m)) * w.T @ w
-    return cost
 
 def cross_validation_sets(tX, y, k_indices, i):
     """
@@ -82,43 +56,19 @@ def cross_validation_sets(tX, y, k_indices, i):
     """
     train_indices = np.concatenate(np.delete(k_indices, i, axis=0), axis=0)
     val_indices = k_indices[i]
-    
+  
     #creates training and validation:
     tX_train = np.take(tX, train_indices, axis=0)
     y_train = np.take(y, train_indices, axis=0)
     tX_val = np.take(tX, val_indices, axis=0)
     y_val = np.take(y, val_indices, axis=0)
-    
+
     # tests: 
     size = len(train_indices) + len(val_indices)
     assert (tX_train.shape[0] + tX_val.shape[0] == size)
     assert (y_train.shape[0] + y_val.shape[0] == size)
     return tX_train, y_train, tX_val, y_val
 
-def gradient_MSE(tX, y, w):
-    """
-    gradient_MSE: calculates the gradient of the MSE function 
-    @input:
-    - np.array(N,) y: labels
-    - np.array(N,m) tX: features
-    - np.array(m,) w: weights
-    @output: np.array(m,) gradient of MSE
-    """
-    return (-1 / len(y)) * tX.T @ (y - tX @ w)
-
-def MSE_loss(tX, y, w):
-    """
-    MSE_loss: calculates the MSE loss
-    @input:
-    - np.array(N,) y: labels
-    - np.array(N,m) tX: features
-    - np.array(m,) w: weights
-    @output: double, MSE loss
-    """
-    assert(w.shape[0] == tX.shape[1])
-    assert(y.shape[0] == tX.shape[0])
-    MSE = np.square(np.subtract(y,tX @ w)).mean()
-    return MSE
 
 def poly_feats(tX, degree): 
     """poly_feats: performs polynomial feature expansion
@@ -127,12 +77,12 @@ def poly_feats(tX, degree):
     - double degree: degree of expansion
     @output: [1, X, X^2, X^3, etc]
     """
-    # add bias term:
+    #add bias term:
     if not np.array_equal(tX[:, 0], np.ones(len(tX))):
         tX_poly = np.hstack((np.ones((len(tX), 1)), tX))
     if degree>1: 
         for deg in range(2, degree+1):
-            tX_poly = np.c_[tX_poly, np.power(tX, deg)]
+              tX_poly = np.c_[tX_poly, np.power(tX, deg)]
     return tX_poly
 
 
@@ -178,31 +128,23 @@ def replace_outlayers_values(features, delta, mean=True, replace=True):
     """
     vals = []
     new_data = np.empty((len(features), 1))
+      
     for i in range(features.shape[1]):
         column = features[:, i].copy()
         Q1 = np.quantile(column, 0.10)
         Q3 = np.quantile(column, 0.75)
         IQR = Q3 - Q1
-        if mean:
-            new_val = np.mean(column)
-        else:
-            new_val = np.median(column)
+        if mean: new_val = np.mean(column)
+        else: new_val = np.median(column)
         col_no_outl = np.where(
-                ~((column < (Q1 - delta * IQR)) | (column >
-                                                   (Q3 + delta * IQR))),
-                column, new_val)
+            ~((column < (Q1 - delta * IQR)) | (column >
+                               (Q3 + delta * IQR))),
+            column, new_val)
         new_data = np.concatenate(
-                (new_data, np.reshape(col_no_outl, (len(features), 1))),
-                axis=1)
+            (new_data, np.reshape(col_no_outl, (len(features), 1))),
+            axis=1)
         vals.append(new_val)
     return new_data[:, 1:], vals
-
-def sigmoid_activation(z):
-    """
-    sigmoid_activation: calculates the sigmoid activation of a vector z
-    @output: np.array(m,) 
-    """
-    return 1.0 / (1.0 + np.exp(-z))
 
 def standardize(x):
     # if bias column: 
@@ -226,13 +168,9 @@ def standardize_with_mean_std(x, mean, std):
 
 def test_preprocessing(tX_test, tX, parameters, model):
     invalid_identifier = -999
-    tX_test_invalid, medians = replace_invalid_values(tX_test,
-                                              invalid_identifier,
-                                              mean=False)
+    tX_test_invalid, medians = replace_invalid_values(tX_test,invalid_identifier,mean=False)
     delta = 1.5
-    tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,
-                                                     delta,
-                                                     mean=False)
+    tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,delta,mean=False)
     # Standard par rapport à moyenne et std de train:
     POLY = parameters[model]['poly']
 
@@ -245,17 +183,17 @@ def test_preprocessing(tX_test, tX, parameters, model):
     tX_test_std = standardize_with_mean_std(poly_X_test, mean_train, std_train)
     return tX_test_std
 
-def X_processing(tX,POLY):
+def X_preprocessing(tX,POLY):
     # replace invalid data:
     invalid_identifier = -999
     tX_invalid, medians = replace_invalid_values(tX,
-                                                 invalid_identifier,
-                                                 mean=False)
+                             invalid_identifier,
+                             mean=False)
     # replace outliers:
     delta = 1.5
     tX_filtered, medians = replace_outlayers_values(tX_invalid,
-                                                    delta,
-                                                    mean=False)
+                              delta,
+                              mean=False)
     #polynonmial expansion:
     tX_pol = poly_feats(tX_filtered, POLY)
 

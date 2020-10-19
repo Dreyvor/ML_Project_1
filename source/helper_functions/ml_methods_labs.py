@@ -4,6 +4,8 @@ import numpy as np
 import csv
 import numpy as np
 from helper_functions.helper_functions import *
+from helper_functions.losses import *
+
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """

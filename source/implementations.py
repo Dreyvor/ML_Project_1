@@ -8,6 +8,8 @@ import os
 #additional functions:
 from helper_functions.helper_functions import *
 from helper_functions.ml_methods_labs import *
+from helper_functions.losses import *
+
 
 with open('parameters/default_parameters.json') as json_file:
      default_parameters = json.load(json_file)
@@ -94,6 +96,7 @@ def logistic_regression(y, tX, initial_w, parameters):
                                    initial_w=initial_w,
                                    param=parameters)
     return best_w, avg_loss
+    
 def ridge_regression(y, tX, parameters):
     """
     ridge_regression: weights with normal equations of ridge regression
@@ -153,7 +156,7 @@ def train_model(tX,
     # get indices of k-fold:
     k_indices = build_k_indices(y, K)
 
-    tX_std = X_processing(tX,POLY)
+    tX_std = X_preprocessing(tX,POLY)
 
     if verbose:
         print(f'Data shape:{tX_std.shape}')
@@ -262,7 +265,7 @@ def train_model(tX,
 
     return best_w, np.mean(loss)
 
-#---------------------------------GRADIENT AND OTHER:------------------------------#
+#---------------------------------WEIGHTS WITH GD/SGD:------------------------------#
 
 def update_weights_logistic(tX, y, w, parameters):
     """
@@ -312,7 +315,6 @@ def update_weights_LS(tX_train, y_train, tX_val, y_val):
     # evaluate loss on validation set:
     loss = MSE_loss(tX_val,y_val, w)
     return w, loss
-
 
 def update_weights_LS_GD(tX, y, w, parameters):
     """
