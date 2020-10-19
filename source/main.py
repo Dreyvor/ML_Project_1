@@ -23,8 +23,10 @@ models = {
 
 if not os.path.exists('../data/results/predictions'):
     os.makedirs('../data/results/predictions')
+if not os.path.exists('../data/results/plots'):
+    os.makedirs('../data/results/plots')
 if not os.path.exists('../data/results/weights'):
-    os.makedirs('../data/results/weigths')
+    os.makedirs('../data/results/weights')
 if not os.path.exists('parameters'):
     os.makedirs('parameters')
 if not os.path.exists('helper_functions'):
@@ -74,9 +76,9 @@ best_w, avg_loss = train_model(tX=tX,
                                initial_w=None,
                                param=parameters)
     
-np.save('../data/results/weigths/best_w.csv', best_w)
+np.save('../data/results/weights/best_w.csv', best_w)
 
-print('Create predictions, saved in ../data/results/')
+print('Create predictions: saved in ../data/results/')
 tX_test_std = test_preprocessing(tX_test, tX, parameters, model)
 
 
