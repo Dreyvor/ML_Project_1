@@ -1,6 +1,11 @@
 # ML_Project_1
 Project 1 of the Machine Learning course given at the EPFL Fall 2020. 
 
+## TO DO:
+- write report
+- comment all functions
+- verify requirements and that main.py works 
+
 ## Higgs Boson: Machine Learning Challenge
 
 ### Structure of repository: 
