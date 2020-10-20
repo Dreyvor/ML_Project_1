@@ -15,15 +15,26 @@
 \maketitle
 
 \begin{abstract}
-  A critical part of scientific discovery is the
-  communication of research findings to peers or the general public.
-  Mastery of the process of scientific communication improves the
-  visibility and impact of research. While this guide is a necessary
-  tool for learning how to write in a manner suitable for publication
-  at a scientific venue, it is by no means sufficient, on its own, to
-  make its reader an accomplished writer. 
-  This guide should be a starting point for further development of 
-  writing skills.
+ 
+ 
+ 
+ The goal of the written report is to show what you did and that you understand what you are doing. This does
+not mean that you need to explain everything that was shown in class. You can assume that the reader knows
+what cross-validation or gradient descent are. However, the reader should be able to reproduce your work, your
+results and understand why you made particular choices. Your choice of method need to be well motivated and
+you need to show evidence that your work has an eect.
+The simplest way to do so is to start with a simple model as a baseline, evaluate it, and a way to improve it,
+evaluate again and repeat. Explain the process that leads to your various improvements, evaluate the results
+carefully and present evidence using plots and tables.
+Cross validate
+Do not rely solely on the Kaggle/AICrowd submission system to get an error estimate. You need cross-
+validation to get an idea of the variance of your model.
+Tune Hyper-Parameters
+When comparing two models, make sure you tuned the hyper-parameters for both models beforehand.
+Comparing un-tuned / ill-defined models is not meaningful.
+Explain your decisions
+Do not throw a list of 10 methods you tried without explanation. We are more interested in your decision
+process than in what you tried.
 \end{abstract}
 
 \section{Introduction}
