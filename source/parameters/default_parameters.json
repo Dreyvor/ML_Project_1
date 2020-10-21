@@ -1,28 +1,24 @@
 {"LR":{
-    "lambda_":0.02, 
-    "lr":0.01,
-    "max_iters":100,
+    "lambda_":0.0, 
+    "lr":0.3,
+    "max_iters":500,
     "K":5, 
     "poly":2
     }, 
  "LS_GD": {
-    "lambda_":0.0,
-    "lr":0.1,
-    "max_iters":250,
+    "lr":0.01,
+    "max_iters":100,
     "K":5, 
     "poly":2 
     },
  "LS_SGD": {
-    "lambda_":0.0,
     "lr":0.01,
     "max_iters":100,
     "K":5, 
     "poly":2,
     "batch_size":1
     },
-  "LS_normal": {
-       "lambda_":0.0, 
-      "max_iters":1,
+  "LS_normal": {"max_iters":1,
     "K":5, 
      "poly":2},
   "RR_normal": {

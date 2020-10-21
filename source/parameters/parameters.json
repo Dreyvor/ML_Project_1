@@ -1,5 +1,5 @@
 {"LR":{
-    "lambda_":0.00, 
+    "lambda_":0.0, 
     "lr":0.3,
     "max_iters":500,
     "K":5, 
