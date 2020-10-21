@@ -2,6 +2,7 @@
 
 \usepackage{hyperref}
 \usepackage{graphicx}	% For figure environment
+\usepackage{todonotes}
 
 \long\def\/*#1*/{} % For long commentaries (ex: \/* my multiple-line comment */)
 
@@ -43,7 +44,7 @@
     \subsection{Data exploration and pre-processing}\label{subsec:data_cleaning}
     \subsection{Model implementation}
         \subsubsection{Parameters tuning}
-            To tune the parameters of our model we performed a \textit{randomized grid search}. The idea is to give a range of values to each parameter. Then we pick $k$ random combinations of parameter's value among their respective range. After that we evaluate the model using cross validation. At each iteration we ensure that the value combination has not been tested before. We keep the results to compare them at the end and output the parameters value combination that gave the minimum average loss. This solution is faster that grid search or manual testing.
+            To tune the parameters of our model we performed a \textit{randomized grid search}. The idea is to give a range of values to each parameter. Then we pick $k$ random combinations of parameter's value among their respective range. After that we evaluate the model using cross validation. At each iteration we ensure that the value combination has not been tested before. We keep the results to compare them at the end and output the parameters value combination that gave the minimum average loss. This solution is faster that grid search or manual testing. We used this method on the following parameters: \todo{Fill}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}\label{sec: results}
     Organize the results section based on the sequence of table and
