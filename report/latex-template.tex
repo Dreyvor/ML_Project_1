@@ -3,12 +3,13 @@
 \usepackage{hyperref}
 \usepackage{graphicx}	% For figure environment
 
+\long\def\/*#1*/{} % For long commentaries (ex: \/* my multiple-line comment */)
 
 \begin{document}
 \title{Higgs Boson: a Machine Learning Challenge}
 
 \author{
-  Timothée Duran, Marijn van der Meer, Bradley ?? 
+  Timothée Duran, Marijn van der Meer, Bradley Mathez
 }
 
 \maketitle
@@ -19,7 +20,7 @@
 not mean that you need to explain everything that was shown in class. You can assume that the reader knows
 what cross-validation or gradient descent are. However, the reader should be able to reproduce your work, your
 results and understand why you made particular choices. Your choice of method need to be well motivated and
-you need to show evidence that your work has an eect.
+you need to show evidence that your work has an elect.
 The simplest way to do so is to start with a simple model as a baseline, evaluate it, and a way to improve it,
 evaluate again and repeat. Explain the process that leads to your various improvements, evaluate the results
 carefully and present evidence using plots and tables.
@@ -28,7 +29,7 @@ Do not rely solely on the Kaggle/AICrowd submission system to get an error estim
 validation to get an idea of the variance of your model.
 Tune Hyper-Parameters
 When comparing two models, make sure you tuned the hyper-parameters for both models beforehand.
-Comparing un-tuned / ill-defined models is not meaningful.
+Comparing un-tuned \/ ill-defined models is not meaningful.
 Explain your decisions
 Do not throw a list of 10 methods you tried without explanation. We are more interested in your decision
 process than in what you tried.
@@ -40,6 +41,10 @@ process than in what you tried.
 Describe your idea and how it was implemented to solve
   the problem. Survey the related work, giving credit where credit is
   due.
+  \subsection{Data exploration and pre-processing}\label{subsec:data_cleaning}
+  \subsection{
+  Model implementation
+  }
 \section{Results}\label{sec: results}
 Organize the results section based on the sequence of table and
 figures you include. Prepare the tables and figures as soon as all
