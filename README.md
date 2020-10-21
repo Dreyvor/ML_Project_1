@@ -2,9 +2,17 @@
 Project 1 of the Machine Learning course given at the EPFL Fall 2020. 
 
 ## TO DO:
-- write report
-- comment all functions
-- verify requirements and that main.py works 
+- [TIM] Rename main.py by run.py and make it run without user inputs. (Keep main for us)
+- [TIM] Implemente regularized function for automatic grading
+- [ALL]Verify imports
+- Write report
+	- [BRAD] Introduction
+	- [BRAD] Fine tuning part
+	- [TIM] Cleaning + plots
+	- [MAR] Complete results section
+	- [MAR] Training part
+- [TIM] Comment all functions
+- [TIM] Verify requirements and that run.py works 
 
 ## Higgs Boson: Machine Learning Challenge
 
@@ -28,6 +36,6 @@ Project 1 of the Machine Learning course given at the EPFL Fall 2020.
 
 ### Instructions to run: 
 - Python modules requirements: Numpy, matplotlib.pyplot, datetime, json **TO COMPLETE**
-- Decide wether to use default parameters for training or your own. Have a look if the default parameters in `parameters/default_parameters.json` are good for you. Otherwise, to take your own, modify the values in `parameters/parameters.json` to suit you. 
-- Go into `source/` and run `$python main.py` andd follow instructions
+- Decide whether to use default parameters for training or your own. Have a look if the default parameters in `parameters/default_parameters.json` are good for you. Otherwise, to take your own, modify the values in `parameters/parameters.json` to suit you. 
+- Go into `source/` and run `$python main.py` and follow instructions
 - Predictions will be saved in `../data/results/predictions/.` and weights will be saved in `../data/results/weights/.`. To see plots of evolution of losses during training, see plots saved in `../data/results/plots/.`
