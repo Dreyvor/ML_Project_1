@@ -6,9 +6,12 @@ __pycache__/
 #data
 #data/*
 #DO NOT PUSH THE DATA ON GITHUB
-
+/results/plots/*
 # C extensions
 *.so
+
+Final_Submission/source/test.csv
+Final_Submission/source/train.csv
 
 # Distribution / packaging
 .Python

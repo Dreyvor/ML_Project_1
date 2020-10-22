@@ -22,7 +22,7 @@ models = {
 }
 #---------------------------------FUNCTIONS------------------------------#
 
-def least_squares(y, tX, parameters):
+def least_squares(y, tX, parameters=None):
     """
     least_squares: weights with normal equations of least squares
     @input:
@@ -32,52 +32,107 @@ def least_squares(y, tX, parameters):
     - np.array(m,) best_w: weights with smallest loss during cross-val 
     - double avg_loss: average loss over validation sets during cross-val
     """
+    if parameters == None:
+        parameters = {"LS_normal": {"max_iters": 1, "K": 5, "poly": 2}}
     model = 'LS_normal'
-    best_w, avg_loss = train_model(tX=tX, y=y, model=model, param=parameters)
+    initial_w = np.zeros((1 + tX.shape[1] * parameters['LS_normal']['poly']))
+    best_w, avg_loss = train_model(tX=tX,
+                                   y=y,
+                                   model=model,
+                                   initial_w=initial_w,
+                                   param=parameters)
     return best_w, avg_loss
 
-def least_squares_GD(tX, y, initial_w, parameters):
+def least_squares_GD(tX,
+                     y,
+                     initial_w,
+                     max_iters=None,
+                     gamma=None,
+                     parameters=None):
     """
     least_squares_GD: training with least squares GD
     @input:
     - np.array(N,m) tX: features
     - np.array(N,) y: labels
     - np.array(m,) initial_w: starting weights
+    - double max_iters: maximum number of epochs
+    - double gamma: learning rate
     - dict parameters: dictionnary of required parameters
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LS_GD'
-    best_w, avg_loss = train_model(tX=tX,
-                                   y=y,
-                                   model=model,
-                                   initial_w=initial_w,
-                                   param=parameters)
-
+    if max_iters != None and gamma != None:
+        parameters = {
+            'LS_GD': {
+                "lambda_": 0.00,
+                "lr": gamma,
+                "max_iters": max_iters,
+                "K": 5,
+                "poly": 2
+            }
+        }
+    good_shape = 1 + tX.shape[1] * parameters['LS_GD']['poly']
+    if initial_w.shape[0] != good_shape:
+        print(
+            'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
+            .format(good_shape, parameters['LS_GD']['poly']))
+        print('We will use initial_w = 0 everywhere instead:')
+        poly = parameters['LS_GD']['poly']
+        initial_w = np.zeros(tX.shape[1] * poly + 1)
+    
+    best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
 
-def least_squares_SGD(tX, y, initial_w, parameters):
+def least_squares_SGD(tX,
+                     y,
+                     initial_w,
+                     max_iters=None,
+                     gamma=None,
+                     parameters=None):
     """
     least_squares_SGD: training with least squares SGD
     @input:
-    - np.array(N,) y: labels
     - np.array(N,m) tX: features
+    - np.array(N,) y: labels
     - np.array(m,) initial_w: starting weights
+    - double max_iters: maximum number of epochs
+    - double gamma: learning rate
     - dict parameters: dictionnary of required parameters
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LS_SGD'
-    best_w, avg_loss = train_model(tX=tX,
-                                   y=y,
-                                   model=model,
-                                   initial_w=initial_w,
-                                   param=parameters)
+    if max_iters != None and gamma != None:
+        parameters = {
+            'LS_SGD': {
+                "lambda_": 0.00,
+                "lr": gamma,
+                "max_iters": max_iters,
+                "K": 5,
+                "batch_size":1,
+                "poly": 2
+            }
+        }
+    poly = parameters['LS_SGD']['poly'] 
+    good_shape = 1 + tX.shape[1] * poly
+    if initial_w.shape[0] != good_shape:
+        print(
+            'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
+            .format(good_shape, poly))
+        print('We will use initial_w = 0 everywhere instead:')
+        initial_w = np.zeros(tX.shape[1] * poly + 1)
+    best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
 
-def logistic_regression(y, tX, initial_w, parameters):
+def logistic_regression(y,
+                        tX,
+                        initial_w,
+                        max_iters=None,
+                        gamma=None,
+                        parameters=None):
     """
     logistic_regression: logistic (regularized) regression with GD
     @input:
@@ -90,14 +145,67 @@ def logistic_regression(y, tX, initial_w, parameters):
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LR'
-    best_w, avg_loss = train_model(tX=tX,
-                                   y=y,
-                                   model=model,
-                                   initial_w=initial_w,
-                                   param=parameters)
+    if max_iters != None and gamma != None:
+        parameters = {
+            "LR": {
+                "lambda_": 0.0,
+                "lr": 0.3,
+                "max_iters": 100,
+                "K": 5,
+                "poly": 2
+            }
+        }
+    poly = parameters[model]['poly']
+    good_shape = 1 + tX.shape[1] * poly
+    if initial_w.shape[0] != good_shape:
+        print(
+            'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
+            .format(good_shape, poly))
+        print('We will use initial_w = 0 everywhere instead:')
+        initial_w = np.zeros(tX.shape[1] * poly + 1)
+    best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
+    return best_w, avg_loss
+
+def reg_logistic_regression(y,
+                        tX,
+                        initial_w, lambda_ = None, 
+                        max_iters=None,
+                        gamma=None,
+                        parameters=None):
+    """
+    logistic_regression: logistic (regularized) regression with GD
+    @input:
+    - np.array(N,) y: labels
+    - np.array(N,m) tX: features
+    - np.array(m,) initial_w: starting weights
+    - dict parameters: dictionnary of required parameters
+    @output: 
+    - np.array(m,) best_w: weights that got the smallest loss during cross-val
+    - double avg_loss: average loss over validation sets during cross-val
+    """
+    model = 'LR'
+    if max_iters != None and gamma != None:
+        parameters = {
+            "LR": {
+                "lambda_": 0.02,
+                "lr": 0.3,
+                "max_iters": 100,
+                "K": 5,
+                "poly": 2
+            }
+        }
+    poly = parameters[model]['poly']
+    good_shape = 1 + tX.shape[1] * poly
+    if initial_w.shape[0] != good_shape:
+        print(
+            'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
+            .format(good_shape, poly))
+        print('We will use initial_w = 0 everywhere instead:')
+        initial_w = np.zeros(tX.shape[1] * poly + 1)
+    best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
     
-def ridge_regression(y, tX, parameters):
+def ridge_regression(y, tX, parameters = None):
     """
     ridge_regression: weights with normal equations of ridge regression
     @input:
@@ -106,10 +214,16 @@ def ridge_regression(y, tX, parameters):
     @output:
     - np.array(m,) best_w: weights with smallest loss during cross-val 
     - double avg_loss: average loss over validation sets during cross-val
-    """     
+    """
     model = 'RR_normal'
-    best_w, avg_loss = train_model(tX = tX, y= y, 
+    if parameters == None:
+        parameters = {"RR_normal": {"max_iters":1,"K":5,"lambda_":0.02, "poly":2} }
+    model = 'RR_normal'
+    initial_w = np.zeros((1 + tX.shape[1] * parameters['RR_normal']['poly']))
+    best_w, avg_loss = train_model(tX=tX,
+                                   y=y,
                                    model=model,
+                                   initial_w=initial_w,
                                    param=parameters)
     return best_w, avg_loss
 
@@ -118,10 +232,10 @@ def ridge_regression(y, tX, parameters):
 
 def train_model(tX,
                 y,
-                model='LS_GD',
-                initial_w=None,
+                model,
+                initial_w,
                 param=default_parameters,
-                verbose=True):
+                verbose=True, return_acc = False):
     """
     train_model: trains a model according to their parameters in the dictionnary
     @input:
@@ -130,12 +244,14 @@ def train_model(tX,
         - string model: 'LS_GD', 'LS_SGD', 'LS_normal', 'RR_normal' or 'LR'
         - np.array(m,) initial_w: starting weights for GD and SGD
         - dictionary param: different parameters required for training (lr, lambda, etc)
+        - bool verbose: when true prints all data
+        - bool return_acc: also returns the average accuracy over k-folds
     @output: 
         - np.array(m,) best_w: weights that got the smallest loss during cross-val
         - double avg_loss: average loss over validation sets during cross-val
     """
     # will keep last weights and last loss
-    weights, loss = [], []
+    weights, loss, accs = [], [], []
     parameters = param[model]
 
     # parameters:
@@ -161,10 +277,6 @@ def train_model(tX,
     if verbose:
         print(f'Data shape:{tX_std.shape}')
 
-    # initial_w:
-    if initial_w == None:
-        initial_w = np.zeros(tX_std.shape[1])
-
     for i in range(K):
         if verbose:
             print(f'K = {i+1}')
@@ -186,6 +298,7 @@ def train_model(tX,
                                                       parameters)
             cost = cost_history
             accuracy_history = accuracy(tX_val, w, y_val)
+            acc = accuracy_history
 
             if verbose:
                 print('Final loss:{:.4f}'.format(cost))
@@ -196,6 +309,7 @@ def train_model(tX,
                                                    y_val)
             accuracy_history = accuracy(tX_val, w, y_val)
             cost = cost_history
+            acc = accuracy_history
             if verbose:
                 print('Final loss:{:.4f}'.format(cost))
                 print('Final accuracy:{:.4f}%'.format(accuracy_history))
@@ -237,6 +351,7 @@ def train_model(tX,
                 print('Final accuracy:{:.4f}%'.format(acc))
         # Add last weights and loss for auditing:
         weights.append(w)
+        accs.append(acc)
         loss.append(cost)
         costs_[i] = cost_history
         if model != 'LS_normal' and model != 'RR_normal':
@@ -263,7 +378,10 @@ def train_model(tX,
         ax[1].set_title(models[model] + ' , training loss')
         ax[1].legend(range(1, K + 1))
         plt.savefig('../data/results/plots/'+model+'.')
-    return best_w, np.mean(loss)
+    if return_acc: 
+        return best_w, np.mean(loss), np.mean(accs)
+    else: 
+        return best_w, np.mean(loss)
 
 #---------------------------------WEIGHTS WITH GD/SGD:------------------------------#
 

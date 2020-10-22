@@ -69,10 +69,12 @@ else:
     with open('parameters/parameters.json') as json_file:
         parameters = json.load(json_file)
 print('----------------------------------------------')
+
+poly = parameters[model]['poly']
 best_w, avg_loss = train_model(tX=tX,
                                model=model,
                                y=y,
-                               initial_w=None,
+                               initial_w=np.zeros(tX.shape[1] * poly + 1),
                                param=parameters)
     
 np.save('../data/results/weights/best_w.csv', best_w)

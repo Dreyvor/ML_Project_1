@@ -1,0 +1,11 @@
+- [TIM] OK Rename main.py by run.py and make it run without user inputs. (Keep main for us)
+- [TIM] Implemente regularized function for automatic grading
+- [ALL] Verify imports
+- Write report
+    - [BRAD] Introduction
+    - [BRAD] Fine tuning part
+    - [TIM] Cleaning + plots
+    - [MAR] Complete results section
+    - [MAR] Training part
+- [TIM] Comment all functions
+- [TIM] OK Verify requirements and that run.py works 
