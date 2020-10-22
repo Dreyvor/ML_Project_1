@@ -60,7 +60,25 @@ best_w, avg_loss = train_model(tX=tX,
                                initial_w=np.zeros(tX.shape[1] * poly + 1),
                                param=parameters)
     
-tX_test_std = test_preprocessing(tX_test, tX, parameters, model)
+invalid_identifier = -999
+tX_test_invalid, medians = replace_invalid_values(tX_test,
+                                              invalid_identifier,
+                                              mean=False)
+
+delta = 1.5
+tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,
+                                                     delta,
+                                                     mean=False)
+tX_test = tX_test_filtered
+# Standard par rapport à moyenne et std de train:
+
+poly_X_test =  poly_feats(tX_test, poly)
+poly_X_train = poly_feats(tX, poly)
+
+mean_train = np.mean(poly_X_train[:,1:], axis=0)
+std_train = np.std(poly_X_train[:,1:] - mean_train, axis=0)
+
+tX_test_std = standardize_with_mean_std(poly_X_test, mean_train, std_train)
 
 # Generating the name of the file
 today = date.today().strftime('%m-%d')
