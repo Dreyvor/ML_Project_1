@@ -25,9 +25,8 @@ Describe your idea and how it was implemented to solve
   the problem. Survey the related work, giving credit where credit is
   due.
   \subsection{Pre-processing and feature generation}\label{subsec:pre-proc}
-  The data provided was a training set of 250'000 events of 30 features and a test set of around 568'238 events. Features varied from floating points to integer values and labels provided were -1 for background and 1 for boson. Those labels were changed to 1 for boson and 0 for background for computational reasons with logistic regression.  The raw data was plotted into histograms to evaluate how and whether it had to be pre-processed. We noticed that there were invalid ...
-    \textbf{complete invalid numbers...}
-    After invalid values and outfitters were replaced by the medians of our features, we engineered our feautures by adding a bias column and a polynomial expansion $\phi:[X]\rightarrow [1, X, X^2,...,X^k]$ where $X\in \mathbb{R}^{N30}$. The data was then further standardised using Z-score standardisation, e.g. $Z = \frac{X - \mu}{\sigma}$.
+  The data provided was a training set of 250'000 events of 30 features and a test set of around 568'238 events. Features varied from floating points to integer values and labels provided were -1 for background and 1 for boson. Those labels were changed to 1 for boson and 0 for background for computational reasons with logistic regression. Invalid data are marked with the value \textit{-999} and have to be removed. To do this, we have two choices, either we remove the complete sample, or we replace the given value with the mean or median value of the feature. However, since a significant number of invalid values are present, we choose the second method to keep as many samples as possible. The data being normalized after this cleaning, replacing the value by this mean is equivalent to giving it no value. Throughout testing, we noticed that using the median over the mean reduces the error. For outfitting values, we plotted the data into histograms to evaluate how and whether other out-layers should be processed. We then choose to apply the same technique as above for all values that are outside a defined range. \textbf{TODO Explain range}. An example of histogram of data before and after the processing can be found at figure \ref{fig:processing_compare}.
+    After invalid values and outfitters were replaced by the medians of our features, we engineered our features by adding a bias column and a polynomial expansion $\phi:[X]\rightarrow [1, X, X^2,...,X^k]$ where $X\in \mathbb{R}^{N30}$. The data was then further standardised using Z-score standardisation, e.g. $Z = \frac{X - \mu}{\sigma}$.
     
   \subsection{
   Model implementation
@@ -80,17 +79,10 @@ and solutions.
 \end{table}
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=\columnwidth]{denoised_signal_1d}
-  \caption{Signal compression and denoising using the Fourier basis.}
+  \includegraphics[width=\columnwidth]{processing_compare}
+  \caption{Histogram DER\_mass\_MMC values before and after preprocessing.}
   \vspace{-3mm}
-  \label{fig:denoise-fourier}
-\end{figure}
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\columnwidth]{local_wdenoised_1d}
-  \vspace{-3mm}
-  \caption{Signal compression and denoising using the Daubechies wavelet basis.}
-  \label{fig:denoise-wavelet}
+  \label{fig:processing_compare}
 \end{figure}
 
 Use examples and illustrations to clarify ideas and results. For
