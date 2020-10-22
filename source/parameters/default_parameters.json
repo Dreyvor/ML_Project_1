@@ -1,7 +1,7 @@
 {"LR":{
-    "lambda_":0.0, 
-    "lr":0.3,
-    "max_iters":500,
+    "lambda_":0.02, 
+    "lr":0.01,
+    "max_iters":100,
     "K":5, 
     "poly":2
     }, 
