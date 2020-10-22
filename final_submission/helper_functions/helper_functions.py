@@ -43,8 +43,8 @@ def cross_validation_sets(tX, y, k_indices, i):
     """
     cross_validation_sets: separates tX and y randomly into training and validation sets. 
     @input:
-    - np.array(N,) y: labels
     - np.array(N,m) tx: features
+    - np.array(N,) y: labels
     - list k_indices: indices for k-fold cross-val
     - i: 
     @output: 
@@ -121,8 +121,8 @@ def replace_outlayers_values(features, delta, mean=True, replace=True):
     """replace_outlayers_values: replaces outlier values with the median/mean of 
     all the values in the cooresponding feature
     @input: 
-    - np.array(N,m) tX: features
-    - double invalid_identifier: invalid data, here -999
+    - np.array(N,m) features: features
+    - double delta: a bigger delate increase the tolerance
     - bool mean: true if replace with the mean, false for median
     @output: np.array(N,m) with outlier data replaced
     """
@@ -147,6 +147,11 @@ def replace_outlayers_values(features, delta, mean=True, replace=True):
     return new_data[:, 1:], vals
 
 def standardize(x):
+    """standardize data
+    @input: 
+    - np.array(N,m) x: features
+    @output: np.array(N,m) with standardized data
+    """
     # if bias column: 
     if np.array_equal(x[:, 0], np.ones(len(x))):
         centered_data = x[:,1:] - np.mean(x[:,1:], axis=0)
@@ -158,6 +163,13 @@ def standardize(x):
         return std_data
 
 def standardize_with_mean_std(x, mean, std):
+    """standardize data
+    @input: 
+    - np.array(N,m) x: features
+    - np.array(N,m) mean: mean
+    - np.array(N,m) std: standard deviation
+    @output: np.array(N,m) with standardized data
+    """
     # if bias term:
     if np.array_equal(x[:, 0], np.ones(len(x))):
         std_data = (x[:,1:] - mean)/std
