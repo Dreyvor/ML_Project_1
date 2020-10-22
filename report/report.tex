@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \usepackage{graphicx}	% For figure environment
 \usepackage{todonotes}
+\usepackage{amssymb}
 
 \long\def\/*#1*/{} % For long commentaries (ex: \/* my multiple-line comment */)
 
@@ -41,10 +42,10 @@
     Describe your idea and how it was implemented to solve
     the problem. Survey the related work, giving credit where credit is
     due.
-    \subsection{Pre-processing and feature generation}\label{subsec:data_cleaning}
+    \subsection{Pre-processing and feature generation}\label{subsec:pre-processing}
     The data provided was a training set of 250'000 events of 30 features and a test set of around 568'238 events. Features varied from floating points to integer values and labels provided were -1 for background and 1 for boson. Those labels were changed to 1 for boson and 0 for background for computational reasons with logistic regression.  The raw data was plotted into histograms to evaluate how and whether it had to be pre-processed. We noticed that there were invalid ...
-    \textbf{invalid numbers...
-    }
+    \textbf{complete invalid numbers...}
+    After invalid values and outfitters were replaced by the medians of our features, we engineered our feautures by adding a bias column and a polynomial expansion $\phi: [X] \rightarrow [1, X, X^2, ...,X^k]$ where $X\in \mathbb{R}^{Nx30}$. Afterwards, the data was standardized using z-score standardisation, e.g. $Z = \frac{X - \mu}{\sigma}$. 
     \subsection{Model implementation}
     To fit our data, we implemented six different models: 
     \begin{itemize}
@@ -52,7 +53,7 @@
         \item Ridge regression using normal equations
         \item Logistic regression using gradient descent 
     \end{itemize}
-    These different models were evaluated based on their loss and accuracy on validation sets created from a $80\%:20\%$ 5-fold cross-validation. Evaluating all models over 100 epochs with the same learning rate of 0.01 and regularization parameter of 0.02, we observed that (regularized) logistic regression performed much better than the others. Thus, rather than tuning all of the models in order to improve their scores, we chose to concentrate on regularized logistic regression as it seemed the most promising from the start. 
+    These different models were evaluated based on their loss and accuracy on validation sets created from a $80\%:20\%$ 5-fold cross-validation. Evaluating all models over 100 epochs with the same learning rate of 0.01, regularization parameter of 0.02 and polynomial expansion of degree 2, we observed that (regularized) logistic regression performed much better than the others. Thus, rather than tuning all of the models in order to improve their scores, we chose to concentrate on regularized logistic regression as it seemed the most promising from the start. 
     
 
     \subsection{}
@@ -86,6 +87,23 @@
     and solutions.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Figures and Tables}
+\begin{table*}[htbp]
+  \centering
+  \begin{tabular}[c]{|l||l|l|l|}
+    \hline
+    &Average loss&Average accuracy \\
+    \hline
+    Least squares GD & 0.18 & 50.16\% \\
+    Least squares SGD & 0.29 & 50.90\%\\
+    Least squares Normal & 0.15 & 42.68\%\\
+    Ridge regression Normal & 0.15 & 42.68\%\\
+    Logistic regression GD & 0.58 & 73.24\%\\
+    Regularized logistic regression GD & 0.58 & 73.24\% \\
+    \hline
+  \end{tabular}
+  \caption{Accuracy and loss on 20\% validation set for 100 epochs, learning rate of 0.01 and regularization of 0.02. }
+  \label{tab:basic_training}
+\end{table*}
 
 \begin{figure}[tbp]
   \centering
