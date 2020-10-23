@@ -9,7 +9,7 @@ from helper_functions.ml_methods_labs import *
 from helper_functions.losses import *
 
 
-def accuracy(feautres, w, true_y):
+def accuracy(features, w, true_y):
     """
     accuracy: calculates the accuracy of a prediction
     @input: 
@@ -18,7 +18,7 @@ def accuracy(feautres, w, true_y):
     - np.array(N,) true_y
     @output: (TP+TN)/Total
     """
-    y_pred = predict_labels(w, feautres)
+    y_pred = predict_labels(w, features)
     #encode to 0/1
     y_pred_enc = (y_pred + 1) / 2
     P_N = len(y_pred_enc[np.where(np.subtract(y_pred_enc, true_y) == 0)])
@@ -32,23 +32,23 @@ def build_k_indices(y, k_fold, seed=2):
     - double seed: seed for random generator
     @output: k indices sets for k-fold
     """
-    interval = int(y.shape[0] / k_fold)
+    num_row = y.shape[0]
+    interval = int(num_row / k_fold)
     np.random.seed(seed)
-    indices = np.random.permutation(y.shape[0])
+    indices = np.random.permutation(num_row)
     k_indices = [indices[k * interval: (k + 1) * interval]for k in range(k_fold)]
     return np.array(k_indices)
 
 
 def cross_validation_sets(tX, y, k_indices, i):
     """
-    cross_validation_sets: separates tX and y randomly into training and validation sets. 
+    cross_validation_sets: separates tX and y randomly into training and validation sets.
     @input:
     - np.array(N,m) tx: features
     - np.array(N,) y: labels
     - list k_indices: indices for k-fold cross-val
-    - i: 
+    - i: the index of the iteration. (the i-th iteration to find the correct k_indices)
     @output: 
-    percentage = 1-1/K
     - np.array(percentage*N,m) tX_train: training features
     - np.array(percentage*N,) y_train: training labels
     - np.array((1-percentage)*N,m) tX_val: validation features
@@ -65,8 +65,10 @@ def cross_validation_sets(tX, y, k_indices, i):
 
     # tests: 
     size = len(train_indices) + len(val_indices)
+
     assert (tX_train.shape[0] + tX_val.shape[0] == size)
     assert (y_train.shape[0] + y_val.shape[0] == size)
+    
     return tX_train, y_train, tX_val, y_val
 
 
@@ -117,12 +119,12 @@ def replace_invalid_values(tX, invalid_identifier, mean=True):
     assert (new_data[:, 1:].shape == tX.shape)
     return new_data[:, 1:], means
 
-def replace_outlayers_values(features, delta, mean=True, replace=True):
+def replace_outlayers_values(features, delta, mean=True):
     """replace_outlayers_values: replaces outlier values with the median/mean of 
     all the values in the cooresponding feature
     @input: 
     - np.array(N,m) features: features
-    - double delta: a bigger delate increase the tolerance
+    - double delta: a bigger delta increase the tolerance
     - bool mean: true if replace with the mean, false for median
     @output: np.array(N,m) with outlier data replaced
     """
@@ -177,38 +179,3 @@ def standardize_with_mean_std(x, mean, std):
     else:
         std_data = (x - mean)/std
         return std_data
-
-def test_preprocessing(tX_test, tX, parameters, model):
-    invalid_identifier = -999
-    tX_test_invalid, medians = replace_invalid_values(tX_test,invalid_identifier,mean=False)
-    delta = 1.5
-    tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,delta,mean=False)
-    # Standard par rapport à moyenne et std de train:
-    POLY = parameters[model]['poly']
-
-    poly_X_test =  poly_feats(tX_test_filtered, POLY)
-    poly_X_train = poly_feats(tX, POLY)
-
-    mean_train = np.mean(poly_X_train[:,1:], axis=0)
-    std_train = np.std(poly_X_train[:,1:] - mean_train, axis=0)
-
-    tX_test_std = standardize_with_mean_std(poly_X_test, mean_train, std_train)
-    return tX_test_std
-
-def X_preprocessing(tX,POLY):
-    # replace invalid data:
-    invalid_identifier = -999
-    tX_invalid, medians = replace_invalid_values(tX,
-                             invalid_identifier,
-                             mean=False)
-    # replace outliers:
-    delta = 1.5
-    tX_filtered, medians = replace_outlayers_values(tX_invalid,
-                              delta,
-                              mean=False)
-    #polynonmial expansion:
-    tX_pol = poly_feats(tX_filtered, POLY)
-
-    # standardize:
-    tX_std = standardize(tX_pol)
-    return tX_std

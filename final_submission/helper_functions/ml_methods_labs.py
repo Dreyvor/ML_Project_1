@@ -46,14 +46,6 @@ def create_csv_submission(ids, y_pred, name):
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({'Id':int(r1),'Prediction':int(r2)})
 
-def grid_search(y, tx, w0, w1):
-    """Algorithm for grid search."""
-    losses = np.zeros((len(w0), len(w1)))
-    for i in range(len(w0)):
-        for j in range(len(w1)):
-            w = np.array((w0[i], w1[j]))
-            losses[i,j] = compute_loss(y, tx, w)
-    return losses
 
 def load_csv_data(data_path, sub_sample=False):
     """Loads data and returns y (class labels), tX (features) and ids (event ids)"""

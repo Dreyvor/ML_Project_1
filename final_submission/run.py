@@ -55,8 +55,8 @@ print('Training model...')
 model = 'LR'
 poly = parameters[model]['poly']
 best_w, avg_loss = train_model(tX=tX,
-                               model=model,
                                y=y,
+                               model=model,
                                initial_w=np.zeros(tX.shape[1] * poly + 1),
                                param=parameters)
     

@@ -162,9 +162,9 @@ def logistic_regression(y, tX, initial_w, max_iters=None, gamma=None, parameters
     if max_iters != None and gamma != None:
         parameters = {
             "LR": {
-                "lambda_": 0.0,
-                "lr": 0.3,
-                "max_iters": 100,
+                "lambda_": 0.02,
+                "lr": 0.18,
+                "max_iters": 250,
                 "K": 5,
                 "poly": 2
             }
@@ -222,8 +222,8 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
     """
     train_model: trains a model according to their parameters in the dictionnary
     @input:
-        - np.array(N,) y: labels
         - np.array(N,m) tX: features
+        - np.array(N,) y: labels
         - string model: 'LS_GD', 'LS_SGD', 'LS_normal', 'RR_normal' or 'LR'
         - np.array(m,) initial_w: starting weights for GD and SGD
         - dictionary param: different parameters required for training (lr, lambda, etc)
@@ -255,7 +255,11 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
     # get indices of k-fold:
     k_indices = build_k_indices(y, K)
 
-    tX_std = X_preprocessing(tX,POLY)
+    # polynonmial expansion:
+    tX_pol = poly_feats(tX, POLY)
+
+    # standardize:
+    tX_std = standardize(tX_pol)
 
     if verbose:
         print(f'Data shape:{tX_std.shape}')
@@ -276,9 +280,9 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
 
         # if RR_normal or LS_normal no GD:
         if model == 'RR_normal':
-            w, cost_history = update_weights_RR(tX_train, y_train,
-                                                      tX_val, y_val,
-                                                      parameters)
+            w, cost_history = ridge_regression_update(tX_train, y_train,
+                                                tX_val, y_val,
+                                                parameters)
             cost = cost_history
             accuracy_history = accuracy(tX_val, w, y_val)
             acc = accuracy_history
@@ -288,8 +292,8 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
                 print('Final accuracy:{:.4f}%'.format(accuracy_history))
 
         elif model == 'LS_normal':
-            w, cost_history = update_weights_LS(tX_train, y_train, tX_val,
-                                                   y_val)
+            w, cost_history = least_squares_update(tX_train, y_train, tX_val,
+                                                y_val)
             accuracy_history = accuracy(tX_val, w, y_val)
             cost = cost_history
             acc = accuracy_history
@@ -360,7 +364,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
         ax[1].plot(train_costs_.T)
         ax[1].set_title(models[model] + ' , training loss')
         ax[1].legend(range(1, K + 1))
-        plt.savefig('../data/results/plots/'+model+'.')
+        plt.savefig('./results/plots/'+model+'.png')
     if return_acc: 
         return best_w, np.mean(loss), np.mean(accs)
     else: 
@@ -372,8 +376,8 @@ def update_weights_logistic(tX, y, w, parameters):
     """
     update_weights_logistic: one iteration with GD on logistic (regularized) loss
     @input:
-    - np.array(N,) y: labels
     - np.array(N,m) tX: features
+    - np.array(N,) y: labels
     - np.array(m,) w: weights to be updated
     - dict parameters: dictionnary of required parameters
     @output: 
@@ -401,12 +405,12 @@ def update_weights_logistic(tX, y, w, parameters):
     w -= lr * gradient
     return w
 
-def update_weights_LS(tX_train, y_train, tX_val, y_val):
+def least_squares_update(tX_train, y_train, tX_val, y_val):
     """
     least_squares_update: weights with normal equations of least squares
     @input:
-    - np.array(N,) y_train and y_val: training and validation labels
     - np.array(N,m) tX_train and tX_val: training and validation features
+    - np.array(N,) y_train and y_val: training and validation labels
     @output: 
     - np.array(m,) w: weights 
     - double loss: MSE loss
@@ -421,8 +425,8 @@ def update_weights_LS_GD(tX, y, w, parameters):
     """
     update_weights_LS_GD: one step of GD with MSE
     @input:
-    - np.array(N,) y: labels
     - np.array(N,m) tX: features
+    - np.array(N,) y: labels
     - np.array(m,) w: weights
     - dict parameters: dictionnary of required parameters
     @output: updated weights according to GD
@@ -439,8 +443,8 @@ def update_weights_LS_SGD(tX, y, w, parameters):
     """
     update_weights_LS_SGD: one step of SGD with MSE
     @input:
-    - np.array(N,) y: labels
     - np.array(N,m) tX: features
+    - np.array(N,) y: labels
     - np.array(m,) w: weights
     - dict parameters: dictionnary of required parameters
     @output: updated weights according to SGD
@@ -457,12 +461,12 @@ def update_weights_LS_SGD(tX, y, w, parameters):
         w -= lr * grad
     return w
 
-def update_weights_RR(tX_train, y_train, tX_val, y_val, parameters):
+def ridge_regression_update(tX_train, y_train, tX_val, y_val, parameters):
     """
-    least_squares_update: weights with normal equations of least squares
+    ridge_regression_update: weights with normal equations of least squares
     @input:
-    - np.array(N,) y_train and y_val: training and validation labels
     - np.array(N,m) tX_train and tX_val: training and validation features
+    - np.array(N,) y_train and y_val: training and validation labels
     - dict parameters: dictionnary of required parameters
     @output:
     - np.array(m,) w: weights 

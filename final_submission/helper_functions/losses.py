@@ -11,8 +11,8 @@ def cost_logistic(tX, y, w, parameters):
 	"""
 	cost_logistic: calculates the logistic (regularized) loss
 	@input:
-	- np.array(N,) y: labels
 	- np.array(N,m) tX: features
+	- np.array(N,) y: labels
 	- np.array(m,) w: weights
 	- dict parameters: dictionnary of required parameters
 	@output: 
@@ -39,8 +39,8 @@ def gradient_MSE(tX, y, w):
 	"""
 	gradient_MSE: calculates the gradient of the MSE function 
 	@input:
-	- np.array(N,) y: labels
 	- np.array(N,m) tX: features
+	- np.array(N,) y: labels
 	- np.array(m,) w: weights
 	@output: np.array(m,) gradient of MSE
 	"""
@@ -50,8 +50,8 @@ def MSE_loss(tX, y, w):
 	"""
 	MSE_loss: calculates the MSE loss
 	@input:
-	- np.array(N,) y: labels
 	- np.array(N,m) tX: features
+	- np.array(N,) y: labels
 	- np.array(m,) w: weights
 	@output: double, MSE loss
 	"""
