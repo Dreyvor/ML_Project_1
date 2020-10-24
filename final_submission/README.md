@@ -28,11 +28,13 @@ Python modules requirements: `numpy`, `matplotlib.pyplot`, `datetime`, `json`, `
 Predictions will be saved in `data/results/predictions/` and weights will be saved in `data/results/weights/`. To see plots of evolution of losses during training, see plots saved in `data/results/plots/`
 
 There are two methods to run our program.
+
 1. For the project **submission** use:
 ```
 python run.py
 ```
 It will compute our best score that we submitted on [AIcrowd](https://www.aicrowd.com)
+
 2. We did a small user-friendly interface to run our code with the other models. Please execute:
 ```
 python main.py
