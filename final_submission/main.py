@@ -52,25 +52,22 @@ print('Loading data :) this may take a few minutes...')
 y, tX, ids = load_csv_data(DATA_TRAIN_PATH)
 _, tX_test, ids_test = load_csv_data(DATA_TEST_PATH)
 
-# Pre-processing of training data: 
-
 # Encoding of y to transforms values in the set [0,1]
 y_enc = (y+1)/2
 y = y_enc
-
-# Pre-processing of training data: 
-tX_std, tX_test_std, y = pre_processing(tX_test, tX,y) 
-
 
 # Loading of parameters: 
 print('Loading parameters...')
 with open('data/parameters.json') as json_file:
     parameters = json.load(json_file)
+
+# Pre-processing of training data: 
+poly = parameters[model]['poly']
+tX_std, tX_test_std, y = pre_processing(tX_test, tX, y, poly) 
     
 #----------------------------------Training-------------------------------
 print('----------------------------------------------')
 # Model training: 
-poly = parameters[model]['poly']
 best_w, avg_loss = train_model(tX=tX_std,
                                y=y,
                                model=model,

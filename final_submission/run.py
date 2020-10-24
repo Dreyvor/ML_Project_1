@@ -58,13 +58,13 @@ _, tX_test, ids_test = load_csv_data(DATA_TEST_PATH)
 y_enc = (y+1)/2
 y = y_enc
 
-# Pre-processing of training data: 
-tX_std, tX_test_std, y = pre_processing(tX_test, tX,y) 
+# Pre-processing of training data:
+poly = parameters[model]['poly']
+tX_std, tX_test_std, y = pre_processing(tX_test, tX, y, poly)
 
 #----------------------------------Training-------------------------------
 print('----------------------------------------------')
 # Model training: 
-poly = parameters[model]['poly']
 best_w, avg_loss = train_model(tX=tX_std,
                                y=y,
                                model=model,

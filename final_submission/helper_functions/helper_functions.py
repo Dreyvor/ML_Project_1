@@ -180,11 +180,10 @@ def standardize_with_mean_std(x, mean, std):
         std_data = (x - mean)/std
         return std_data
     
-def pre_processing(tx_test, tx, y_):
+def pre_processing(tx_test, tx, y_, poly):
     tX_test, tX, y = tx_test.copy(), tx.copy(), y_.copy()
     invalid_identifier = -999
     #delta = 1.5
-    POLY=3
     
     tX_invalid, medians = replace_invalid_values(tX,
                                               invalid_identifier,
@@ -196,7 +195,7 @@ def pre_processing(tx_test, tx, y_):
      
     
     # polynonmial expansion:
-    tX_pol = poly_feats(tX_filtered, POLY)
+    tX_pol = poly_feats(tX_filtered, poly)
     
     # standardize:
     tX_std = standardize(tX_pol)   
@@ -210,7 +209,7 @@ def pre_processing(tx_test, tx, y_):
                                                      #mean=False)
     
 
-    poly_X_test = poly_feats(tX_test_invalid, POLY)
+    poly_X_test = poly_feats(tX_test_invalid, poly)
     
     mean_train = np.mean(tX_pol[:,1:], axis=0)
     std_train = np.std(tX_pol[:,1:] - mean_train, axis=0)

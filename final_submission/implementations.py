@@ -314,6 +314,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
                     accuracy_history.append(acc)
                 if model == 'LS_SGD':
                     # calulate loss:
+                    #print(tX_val.shape, y_val.shape, w.shape)
                     cost = MSE_loss(tX_val, y_val, w)
                     cost_history.append(cost)
                     train_cost_history.append(MSE_loss(tX_train, y_train, w))
