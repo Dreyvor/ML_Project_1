@@ -71,7 +71,7 @@ with open('data/parameters.json') as json_file:
 print('----------------------------------------------')
 # Model training: 
 poly = parameters[model]['poly']
-best_w, avg_loss = train_model(tX=tX,
+best_w, avg_loss = train_model(tX=tX_std,
                                y=y,
                                model=model,
                                initial_w=np.zeros(tX.shape[1] * poly + 1),
