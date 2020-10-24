@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.csv
 #data
 #data/*
 #DO NOT PUSH THE DATA ON GITHUB
