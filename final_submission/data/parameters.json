@@ -1,9 +1,9 @@
 {"LR":{
     "lambda_":0.02, 
-    "lr":0.5,
-    "max_iters":300,
+    "lr":0.7,
+    "max_iters":350,
     "K":5, 
-    "poly":2
+    "poly":3
     }, 
  "LS_GD": {
     "lr":0.01,

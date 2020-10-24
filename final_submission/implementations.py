@@ -336,7 +336,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
 
     if verbose:
         print('Average loss: {:.2f}'.format(np.mean(loss)))
-        print('Average accuracy: {:.2f}%'.format(np.mean(accuracy_history)))
+        print('Average accuracy: {:.2f}%'.format(np.mean(accs)))
 
     # best weights of min loss:
     best_w = weights[np.argmin(loss)]
