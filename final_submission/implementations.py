@@ -340,6 +340,8 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
 
     # best weights of min loss:
     best_w = weights[np.argmin(loss)]
+    print(f'Best loyy:{loss[np.argmin(loss)]}')
+    print(f'Best accuracy:{accs[np.argmin(loss)]}')
 
     # Plot loss evolution for GD:
     if model != 'LS_normal' and model != 'RR_normal' and verbose:

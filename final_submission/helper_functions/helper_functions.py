@@ -184,7 +184,7 @@ def pre_processing(tx_test, tx, y_):
     tX_test, tX, y = tx_test.copy(), tx.copy(), y_.copy()
     invalid_identifier = -999
     #delta = 1.5
-    POLY=2
+    POLY=3
     
     tX_invalid, medians = replace_invalid_values(tX,
                                               invalid_identifier,
