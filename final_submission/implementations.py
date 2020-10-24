@@ -25,7 +25,7 @@ models = {
 
 #--------------------------------- FUNCTIONS ------------------------------#
 
-def least_squares_GD(y, tX, initial_w, max_iters=None, gamma=None, parameters=None):
+def least_squares_GD(y, tX, initial_w, max_iters, gamma):
     """
     least_squares_GD: training with least squares GD
     @input:
@@ -34,14 +34,12 @@ def least_squares_GD(y, tX, initial_w, max_iters=None, gamma=None, parameters=No
     - np.array(m,) initial_w: initial weight vector
     - double max_iters: maximum number of epochs
     - double gamma: step size
-    - dict parameters: dictionnary of required parameters
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LS_GD'
-    if max_iters != None and gamma != None:
-        parameters = {
+    parameters = {
             'LS_GD': {
                 "lambda_": 0.00,
                 "lr": gamma,
@@ -49,7 +47,7 @@ def least_squares_GD(y, tX, initial_w, max_iters=None, gamma=None, parameters=No
                 "K": 5,
                 "poly": 2
             }
-        }
+    }
     good_shape = 1 + tX.shape[1] * parameters['LS_GD']['poly']
     if initial_w.shape[0] != good_shape:
         print(
@@ -63,7 +61,7 @@ def least_squares_GD(y, tX, initial_w, max_iters=None, gamma=None, parameters=No
     return best_w, avg_loss
 
 
-def least_squares_SGD(y, tX, initial_w, max_iters=None, gamma=None, parameters=None):
+def least_squares_SGD(y, tX, initial_w, max_iters, gamma):
     """
     least_squares_SGD: training with least squares SGD
     @input:
@@ -72,14 +70,12 @@ def least_squares_SGD(y, tX, initial_w, max_iters=None, gamma=None, parameters=N
     - np.array(m,) initial_w: initial weight vector
     - double max_iters: maximum number of epochs
     - double gamma: learning rate
-    - dict parameters: dictionnary of required parameters
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LS_SGD'
-    if max_iters != None and gamma != None:
-        parameters = {
+    parameters = {
             'LS_SGD': {
                 "lambda_": 0.00,
                 "lr": gamma,
@@ -88,7 +84,7 @@ def least_squares_SGD(y, tX, initial_w, max_iters=None, gamma=None, parameters=N
                 "batch_size":1,
                 "poly": 2
             }
-        }
+    }
     poly = parameters['LS_SGD']['poly'] 
     good_shape = 1 + tX.shape[1] * poly
     if initial_w.shape[0] != good_shape:
@@ -101,7 +97,7 @@ def least_squares_SGD(y, tX, initial_w, max_iters=None, gamma=None, parameters=N
     return best_w, avg_loss
 
 
-def least_squares(y, tX, parameters=None):
+def least_squares(y, tX):
     """
     least_squares: weights with normal equations of least squares
     @input:
@@ -111,10 +107,9 @@ def least_squares(y, tX, parameters=None):
     - np.array(m,) best_w: weights with smallest loss during cross-val 
     - double avg_loss: average loss over validation sets during cross-val
     """
-    if parameters == None:
-        parameters = {"LS_normal": {"max_iters": 1, "K": 5, "poly": 2}}
+    parameters = {"LS_normal": {"max_iters": 1, "K": 5, "poly": 2}}
     model = 'LS_normal'
-    initial_w = np.zeros((1 + tX.shape[1] * parameters['LS_normal']['poly']))
+    initial_w = np.zeros((1 + tX.shape[1] * parameters[model]['poly']))
     best_w, avg_loss = train_model(tX=tX,
                                    y=y,
                                    model=model,
@@ -123,21 +118,20 @@ def least_squares(y, tX, parameters=None):
     return best_w, avg_loss
 
 
-def ridge_regression(y, tX, parameters = None):
+def ridge_regression(y, tX, lambda_):
     """
     ridge_regression: weights with normal equations of ridge regression
     @input:
     - np.array(N,) y: labels
     - np.array(N,m) tx: features
+    - double lambda_: regularization parameter
     @output:
     - np.array(m,) best_w: weights with smallest loss during cross-val 
     - double avg_loss: average loss over validation sets during cross-val
     """
+    parameters = {"RR_normal": {"max_iters":1,"K":5,"lambda_":lambda_, "poly":2} }
     model = 'RR_normal'
-    if parameters == None:
-        parameters = {"RR_normal": {"max_iters":1,"K":5,"lambda_":0.02, "poly":2} }
-    model = 'RR_normal'
-    initial_w = np.zeros((1 + tX.shape[1] * parameters['RR_normal']['poly']))
+    initial_w = np.zeros((1 + tX.shape[1] * parameters[model]['poly']))
     best_w, avg_loss = train_model(tX=tX,
                                    y=y,
                                    model=model,
@@ -146,29 +140,29 @@ def ridge_regression(y, tX, parameters = None):
     return best_w, avg_loss
 
 
-def logistic_regression(y, tX, initial_w, max_iters=None, gamma=None, parameters=None):
+def logistic_regression(y, tX, initial_w, max_iters, gamma):
     """
     logistic_regression: logistic (regularized) regression with GD
     @input:
     - np.array(N,) y: labels
     - np.array(N,m) tX: features
     - np.array(m,) initial_w: initial weight vector
-    - dict parameters: dictionnary of required parameters
+    - double max_iters: maximum of epochs
+    - double gamma: learning rate
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
     """
     model = 'LR'
-    if max_iters != None and gamma != None:
-        parameters = {
+    parameters = {
             "LR": {
-                "lambda_": 0.02,
-                "lr": 0.18,
-                "max_iters": 250,
+                "lambda_": 0.00,
+                "lr": gamma,
+                "max_iters": max_iters,
                 "K": 5,
                 "poly": 2
             }
-        }
+    }
     poly = parameters[model]['poly']
     good_shape = 1 + tX.shape[1] * poly
     if initial_w.shape[0] != good_shape:
@@ -181,14 +175,13 @@ def logistic_regression(y, tX, initial_w, max_iters=None, gamma=None, parameters
     return best_w, avg_loss
 
 
-def reg_logistic_regression(y, tX, lambda_, initial_w, max_iters=None, gamma=None, parameters=None):
+def reg_logistic_regression(y, tX, lambda_, initial_w, max_iters, gamma):
     """
     logistic_regression: logistic (regularized) regression with GD
     @input:
     - np.array(N,) y: labels
     - np.array(N,m) tX: features
     - np.array(m,) initial_w: starting weights
-    - dict parameters: dictionnary of required parameters
     @output: 
     - np.array(m,) best_w: weights that got the smallest loss during cross-val
     - double avg_loss: average loss over validation sets during cross-val
@@ -197,9 +190,9 @@ def reg_logistic_regression(y, tX, lambda_, initial_w, max_iters=None, gamma=Non
     if max_iters != None and gamma != None:
         parameters = {
             "LR": {
-                "lambda_": 0.02,
-                "lr": 0.3,
-                "max_iters": 100,
+                "lambda_": lambda_,
+                "lr": gamma,
+                "max_iters": max_iters,
                 "K": 5,
                 "poly": 2
             }
