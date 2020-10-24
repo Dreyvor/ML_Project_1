@@ -54,15 +54,13 @@ _, tX_test, ids_test = load_csv_data(DATA_TEST_PATH)
 
 # Pre-processing of training data: 
 
-# Replace invalid values with medians: 
-tX_invalid, medians = replace_invalid_values(tX, -999, mean=False)
-# Replace outliers with medians: 
-tX_filtered, medians = replace_outlayers_values(tX_invalid, 1.5, mean = False)
-tX = tX_filtered    
-
 # Encoding of y to transforms values in the set [0,1]
 y_enc = (y+1)/2
 y = y_enc
+
+# Pre-processing of training data: 
+tX_std, tX_test_std, y = pre_processing(tX_test, tX,y) 
+
 
 # Loading of parameters: 
 print('Loading parameters...')
@@ -80,20 +78,8 @@ best_w, avg_loss = train_model(tX=tX,
                                param=parameters)
 
 
-#----------------------------------Test Preprocessing------------------------------
 print('----------------------------------------------')
 print('Generating predictions:')
-# Pre-processing of tX_test as the training set: 
-tX_test_invalid, medians = replace_invalid_values(tX_test, -999,mean=False)
-tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,1.5,mean=False)
-tX_test = tX_test_filtered
-# polynomial expansion: 
-poly_X_test =  poly_feats(tX_test, poly)
-poly_X_train = poly_feats(tX, poly)
-# standardizing: 
-mean_train = np.mean(poly_X_train[:,1:], axis=0)
-std_train = np.std(poly_X_train[:,1:] - mean_train, axis=0)
-tX_test_std = standardize_with_mean_std(poly_X_test, mean_train, std_train)
 
 
 #----------------------------------Predictions: ------------------------------

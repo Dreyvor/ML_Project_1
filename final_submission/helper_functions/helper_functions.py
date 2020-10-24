@@ -179,3 +179,50 @@ def standardize_with_mean_std(x, mean, std):
     else:
         std_data = (x - mean)/std
         return std_data
+    
+def pre_processing(tx_test, tx, y_):
+    tX_test, tX, y = tx_test.copy(), tx.copy(), y_.copy()
+    invalid_identifier = -999
+    #delta = 1.5
+    POLY=2
+    
+    tX_invalid, medians = replace_invalid_values(tX,
+                                              invalid_identifier,
+                                              mean=False)
+    
+    
+    #tX_filtered, medians = replace_outlayers_values(tX_invalid, delta, mean = False)
+    tX_filtered, y_filtered = remove_outliers(tX_invalid, y)
+     
+    
+    # polynonmial expansion:
+    tX_pol = poly_feats(tX_filtered, POLY)
+    
+    # standardize:
+    tX_std = standardize(tX_pol)   
+    
+    ## test:
+    tX_test_invalid, medians = replace_invalid_values(tX_test,
+                                                  invalid_identifier,
+                                                  mean=False)
+    #tX_test_filtered, medians = replace_outlayers_values(tX_test_invalid,
+                                                     #delta,
+                                                     #mean=False)
+    
+
+    poly_X_test = poly_feats(tX_test_invalid, POLY)
+    
+    mean_train = np.mean(tX_pol[:,1:], axis=0)
+    std_train = np.std(tX_pol[:,1:] - mean_train, axis=0)
+    tX_test_std = standardize_with_mean_std(poly_X_test, mean_train, std_train)
+    
+
+    return tX_std, tX_test_std, y_filtered
+
+def remove_outliers(tX,y):
+    Q1 = np.quantile(tX,0.00,axis = 0)
+    Q3 = np.quantile(tX,0.85, axis = 0)
+    IQR = Q3 - Q1
+    tX_no_outliers = tX[~((tX < (Q1 - 1.5 * IQR)) |(tX > (Q3 + 1.5 * IQR))).any(axis=1)]
+    y_no_outliers = y[~((tX < (Q1 - 1.5 * IQR)) |(tX > (Q3 + 1.5 * IQR))).any(axis=1)]
+    return tX_no_outliers, y_no_outliers

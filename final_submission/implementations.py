@@ -48,7 +48,7 @@ def least_squares_GD(y, tX, initial_w, max_iters, gamma):
                 "poly": 2
             }
     }
-    good_shape = 1 + tX.shape[1] * parameters['LS_GD']['poly']
+    good_shape = tX.shape[1]
     if initial_w.shape[0] != good_shape:
         print(
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
@@ -86,7 +86,7 @@ def least_squares_SGD(y, tX, initial_w, max_iters, gamma):
             }
     }
     poly = parameters['LS_SGD']['poly'] 
-    good_shape = 1 + tX.shape[1] * poly
+    good_shape = tX.shape[1] 
     if initial_w.shape[0] != good_shape:
         print(
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
@@ -164,7 +164,7 @@ def logistic_regression(y, tX, initial_w, max_iters, gamma):
             }
     }
     poly = parameters[model]['poly']
-    good_shape = 1 + tX.shape[1] * poly
+    good_shape = tX.shape[1] 
     if initial_w.shape[0] != good_shape:
         print(
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
@@ -198,7 +198,7 @@ def reg_logistic_regression(y, tX, lambda_, initial_w, max_iters, gamma):
             }
         }
     poly = parameters[model]['poly']
-    good_shape = 1 + tX.shape[1] * poly
+    good_shape = tX.shape[1] 
     if initial_w.shape[0] != good_shape:
         print(
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
@@ -244,15 +244,10 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
         )
         print('------------------')
         print('START TRAINING:')
-
+    tX_std = tX.copy()
+    
     # get indices of k-fold:
     k_indices = build_k_indices(y, K)
-
-    # polynonmial expansion:
-    tX_pol = poly_feats(tX, POLY)
-
-    # standardize:
-    tX_std = standardize(tX_pol)
 
     if verbose:
         print(f'Data shape:{tX_std.shape}')
