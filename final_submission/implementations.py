@@ -250,7 +250,11 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
     k_indices = build_k_indices(y, K)
 
     if verbose:
-        print(f'Data shape:{tX_std.shape}')
+        print(f'Overall data shape:{tX_std.shape}')
+        val_shape = int(1/5*len(tX_std))
+        training_shape = int((1-1/5)*len(tX_std))
+        print(f'Training data shape:({training_shape},{tX_std.shape[1]})')
+        print(f'Validation data shape:({val_shape},{tX_std.shape[1]})')
 
     for i in range(K):
         if verbose:
@@ -259,6 +263,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
         # create training and validation sets:
         tX_train, y_train, tX_val, y_val = cross_validation_sets(
             tX_std, y, k_indices, i)
+
         #start with initial_w:
         w = initial_w.copy()
         # keep tabs on losses during training
@@ -314,6 +319,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
                     accuracy_history.append(acc)
                 if model == 'LS_SGD':
                     # calulate loss:
+                    #print(tX_val.shape, y_val.shape, w.shape)
                     cost = MSE_loss(tX_val, y_val, w)
                     cost_history.append(cost)
                     train_cost_history.append(MSE_loss(tX_train, y_train, w))
@@ -346,7 +352,7 @@ def train_model(tX, y, model, initial_w, param=default_parameters, verbose=True,
     # Plot loss evolution for GD:
     if model != 'LS_normal' and model != 'RR_normal' and verbose:
         print('------------------')
-        print('Loss evolution:')
+        print(f'Loss evolution: (saved in data/results/plots/)')
         fig, ax = plt.subplots(1, 2, figsize=(10, 5))
         ax[0].plot(costs_.T)
         ax[0].set_title(models[model] + ' , validation loss')
