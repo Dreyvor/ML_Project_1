@@ -55,7 +55,8 @@ def least_squares_GD(y, tX, initial_w, max_iters, gamma):
             .format(good_shape, parameters['LS_GD']['poly']))
         print('We will use initial_w = 0 everywhere instead:')
         poly = parameters['LS_GD']['poly']
-        initial_w = np.zeros(tX.shape[1] * poly + 1)
+        initial_w = np.zeros(tX.shape[1])
+        print(initial_w.shape)
     
     best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
@@ -92,7 +93,7 @@ def least_squares_SGD(y, tX, initial_w, max_iters, gamma):
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
             .format(good_shape, poly))
         print('We will use initial_w = 0 everywhere instead:')
-        initial_w = np.zeros(tX.shape[1] * poly + 1)
+        initial_w = np.zeros(tX.shape[1])
     best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
 
@@ -109,7 +110,7 @@ def least_squares(y, tX):
     """
     parameters = {"LS_normal": {"max_iters": 1, "K": 5, "poly": 2}}
     model = 'LS_normal'
-    initial_w = np.zeros((1 + tX.shape[1] * parameters[model]['poly']))
+    initial_w = np.zeros((tX.shape[1]))
     best_w, avg_loss = train_model(tX=tX,
                                    y=y,
                                    model=model,
@@ -131,7 +132,7 @@ def ridge_regression(y, tX, lambda_):
     """
     parameters = {"RR_normal": {"max_iters":1,"K":5,"lambda_":lambda_, "poly":2} }
     model = 'RR_normal'
-    initial_w = np.zeros((1 + tX.shape[1] * parameters[model]['poly']))
+    initial_w = np.zeros((tX.shape[1]))
     best_w, avg_loss = train_model(tX=tX,
                                    y=y,
                                    model=model,
@@ -170,7 +171,7 @@ def logistic_regression(y, tX, initial_w, max_iters, gamma):
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
             .format(good_shape, poly))
         print('We will use initial_w = 0 everywhere instead:')
-        initial_w = np.zeros(tX.shape[1] * poly + 1)
+        initial_w = np.zeros(tX.shape[1])
     best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
 
@@ -204,7 +205,7 @@ def reg_logistic_regression(y, tX, lambda_, initial_w, max_iters, gamma):
             'Wrong shape for initial_w, should be of shape {}. Polynomial expans of deg {} + a bias term'
             .format(good_shape, poly))
         print('We will use initial_w = 0 everywhere instead:')
-        initial_w = np.zeros(tX.shape[1] * poly + 1)
+        initial_w = np.zeros(tX.shape[1] )
     best_w, avg_loss = train_model(tX, y, model, initial_w, parameters)
     return best_w, avg_loss
     
